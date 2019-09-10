@@ -10,4 +10,9 @@ Install this plugin in the same environment as Datasette to enable the `regexp()
 
     $ pip install datasette-rure
 
+Now you can run queries like this:
+
+    select regexp('hi.*there', 'hi there')
+    select 'hi there' REGEXP 'hi.*there'
+
 Uses https://github.com/davidblewett/rure-python
