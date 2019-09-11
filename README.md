@@ -10,9 +10,38 @@ Install this plugin in the same environment as Datasette to enable the `regexp()
 
     $ pip install datasette-rure
 
-Now you can run queries like this:
+The plugin is built on top of Uses https://github.com/davidblewett/rure-python
+
+## regexp() to test regular expressions
+
+You can test if a value matches a regular expression like this:
 
     select regexp('hi.*there', 'hi there')
-    select 'hi there' REGEXP 'hi.*there'
+    -- returns 1
+    select regexp('not.*there', 'hi there')
+    -- returns 0
 
-Uses https://github.com/davidblewett/rure-python
+You can also use SQLite's custom syntax to run matches:
+
+    select 'hi there' REGEXP 'hi.*there'
+    -- returns 1
+
+This means you can select rows based on regular expression matches - for example, to select every article where the title begins with a lower-case letter:
+
+    select * from articles where title REGEXP '^[a-z]'
+
+## regexp_match() to extract groups
+
+You can extract captured subsets of a pattern using `regexp_match()`.
+
+    select regexp_match('.*( and .*)', title) as n from articles where n is not null
+    -- Returns the ' and X' component of any matching titles, e.g.
+    --     and Recognition
+    --     and Transitions Their Place
+    -- etc
+
+This will return the first parenthesis match when called with two arguments. You can call it with three arguments to indicate which match you would like to extract:
+
+    select regexp_match('.*(and)(.*)', title, 2) as n from articles where n is not null
+
+The function will return `null` for invalid inputs e.g. a pattern without capture groups.
