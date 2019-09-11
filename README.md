@@ -10,7 +10,7 @@ Install this plugin in the same environment as Datasette to enable the `regexp()
 
     $ pip install datasette-rure
 
-The plugin is built on top of Uses https://github.com/davidblewett/rure-python
+The plugin is built on top of the [rure-python](https://github.com/davidblewett/rure-python) library by David Blewett.
 
 ## regexp() to test regular expressions
 
