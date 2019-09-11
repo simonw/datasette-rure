@@ -26,9 +26,11 @@ You can also use SQLite's custom syntax to run matches:
     select 'hi there' REGEXP 'hi.*there'
     -- returns 1
 
-This means you can select rows based on regular expression matches - for example, to select every article where the title begins with a lower-case letter:
+This means you can select rows based on regular expression matches - for example, to select every article where the title begins with an E or an F:
 
-    select * from articles where title REGEXP '^[a-z]'
+    select * from articles where title REGEXP '^[EF]'
+
+Try this out: [REGEXP interactive demo](https://datasette-rure-demo.datasette.io/24ways?sql=select+*+from+articles+where+title+REGEXP+%27%5E%5BEF%5D%27)
 
 ## regexp_match() to extract groups
 
