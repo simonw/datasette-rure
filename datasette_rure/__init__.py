@@ -1,7 +1,17 @@
 from datasette import hookimpl
 import functools
+import threading
 import json
 import rure
+
+
+@functools.lru_cache(maxsize=128)
+def _compiled_regex(threadid, pattern):
+    return rure.compile(pattern)
+
+
+def compiled_regex(pattern):
+    return _compiled_regex(threading.get_ident(), pattern)
 
 
 def none_on_exception(fn):
@@ -16,18 +26,18 @@ def none_on_exception(fn):
 
 
 @none_on_exception
-def regexp(y, x):
-    return 1 if rure.search(y, x) else 0
+def regexp(pattern, input):
+    return 1 if compiled_regex(pattern).search(input) else 0
 
 
 @none_on_exception
 def regexp_match(pattern, input, index=1):
-    return rure.match(pattern, input).group(index)
+    return compiled_regex(pattern).match(input).group(index)
 
 
 @none_on_exception
 def regexp_matches(pattern, input):
-    return json.dumps([m.groupdict() for m in rure.finditer(pattern, input)])
+    return json.dumps([m.groupdict() for m in compiled_regex(pattern).finditer(input)])
 
 
 @hookimpl
