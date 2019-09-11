@@ -45,3 +45,22 @@ This will return the first parenthesis match when called with two arguments. You
     select regexp_match('.*(and)(.*)', title, 2) as n from articles where n is not null
 
 The function will return `null` for invalid inputs e.g. a pattern without capture groups.
+
+## regexp_matches() to extract multiple matches at once
+
+The `regexp_matches()` function can be used to extract multiple patterns from a single string. The result is returned as a JSON array, which can then be further processed using SQLite's [JSON functions](https://www.sqlite.org/json1.html).
+
+The first argument is a regular expression with named capture groups. The second argument is the string to be matched.
+
+    select regexp_matches(
+        'hello (?P<name>\w+) the (?P<species>\w+)',
+        'hello bob the dog, hello maggie the cat, hello tarquin the otter'
+    )
+
+This will return a list of JSON objects, each one representing the named captures from the original regular expression:
+
+    [
+        {"name": "bob", "species": "dog"},
+        {"name": "maggie", "species": "cat"},
+        {"name": "tarquin", "species": "otter"}
+    ]

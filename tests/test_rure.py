@@ -51,3 +51,23 @@ def test_regexp_match_none_on_error(conn):
     # No capturing parenthesis:
     result = conn.execute(sql, ("hello dog", "hello dog")).fetchone()[0]
     assert result is None
+
+
+def test_regexp_matches(conn):
+    sql = "select regexp_matches(?, ?)"
+    result = conn.execute(
+        sql,
+        (
+            "hello (?P<name>.*) the (?P<species>.*)",
+            """
+        hello bob the dog
+        hello maggie the cat
+        hello tarquin the otter
+    """,
+        ),
+    ).fetchone()[0]
+    assert [
+        {"name": "bob", "species": "dog"},
+        {"name": "maggie", "species": "cat"},
+        {"name": "tarquin", "species": "otter"},
+    ] == json.loads(result)
