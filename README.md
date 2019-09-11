@@ -46,6 +46,8 @@ This will return the first parenthesis match when called with two arguments. You
 
 The function will return `null` for invalid inputs e.g. a pattern without capture groups.
 
+Try this out: [regexp_match() interactive demo](https://datasette-rure-demo.datasette.io/24ways?sql=select+%27WHY+%27+%7C%7C+regexp_match%28%27Why+%28.*%29%27%2C+title%29+as+t+from+articles+where+t+is+not+null)
+
 ## regexp_matches() to extract multiple matches at once
 
 The `regexp_matches()` function can be used to extract multiple patterns from a single string. The result is returned as a JSON array, which can then be further processed using SQLite's [JSON functions](https://www.sqlite.org/json1.html).
@@ -64,3 +66,5 @@ This will return a list of JSON objects, each one representing the named capture
         {"name": "maggie", "species": "cat"},
         {"name": "tarquin", "species": "otter"}
     ]
+
+Try this out: [regexp_matches() interactive demo](https://datasette-rure-demo.datasette.io/24ways?sql=select+regexp_matches%28%0D%0A++++%27hello+%28%3FP%3Cname%3E%5Cw%2B%29+the+%28%3FP%3Cspecies%3E%5Cw%2B%29%27%2C%0D%0A++++%27hello+bob+the+dog%2C+hello+maggie+the+cat%2C+hello+tarquin+the+otter%27%0D%0A%29)
